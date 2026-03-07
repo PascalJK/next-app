@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 interface User {
   id: number;
@@ -7,7 +7,17 @@ interface User {
 }
 
 const UsersPage = async () => {
-  var result = await fetch("https://jsonplaceholder.typicode.com/users");
+  var result = await fetch("https://jsonplaceholder.typicode.com/users", {
+    // This will make it so data is not cached and fetched on every load.
+    cache: "no-store",
+
+    next: {
+      // Adding this makes it so data is refreshed from the backend every 10 seconds
+      revalidate: 10
+    },
+
+    // NOTE: This caching behaviour only works in the fetch function. It wont work in 3rd-party libs.
+  });
   const users: User[] = await result.json();
 
   return (
@@ -20,6 +30,6 @@ const UsersPage = async () => {
       </ul>
     </>
   );
-}
+};
 
-export default UsersPage
+export default UsersPage;
